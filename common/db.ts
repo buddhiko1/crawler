@@ -15,6 +15,7 @@ export class DbSaver implements ISaver {
     const db = this._client.db(this._conf.db);
     const collection = db.collection(this._conf.collection);
     for (let page of pages) {
+      page.content = page.content.replace(/\n/g, '')
       const result = await collection.insertOne(page);
       console.log(`${page.title} was inserted`);
     }
