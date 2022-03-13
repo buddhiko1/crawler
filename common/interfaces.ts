@@ -1,12 +1,27 @@
-export interface IDbConf {
-  url: string;
+import { IDhammapadaPage } from "../dhammapada/interfaces";
+
+export type IPage = IDhammapadaPage;
+
+export interface ISaver {
+  save(pages: IPage[]): void;
+}
+
+export interface IDbSaverConf {
+  uri: string;
   db: string;
   collection: string;
 }
 
-export interface IDhammapadaDoc {
-  title: string;
-  content: string;
+export interface IFileSaverConf {
+  dir: string
 }
 
-export type IDbDoc = IDhammapadaDoc
+export interface ICrawlerConf {
+  headless: boolean;
+  slowMo: number; // slow down by ms
+}
+
+export interface IWebsite {
+  pagesUrl: string[],
+  extractPageTitle(url: string): string;
+}
