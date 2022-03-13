@@ -15,15 +15,16 @@ export const CRAWLER_CONF: ICrawlerConf = {
   slowMo: 250,
 }
 
-const urlPrefix = "http://buddhism.lib.ntu.edu.tw/BDLM/lesson/pali/reading/gatha";
-
 export const WEBSITE: IWebsite = {
-  pagesUrl: Array.from(Array(2).keys()).map((x) => `${urlPrefix}${x+1}.htm`),
+  urlPrefix: "http://buddhism.lib.ntu.edu.tw/BDLM/lesson/pali/reading",
+  urlSuffixes: Array.from(Array(3).keys()).map((x) => `gatha${x + 355}.htm`),
   extractPageTitle(url: string): string {
     const regexp = /([^\/]+)htm/g;
     let matchedArray = url.match(regexp);
-    return matchedArray ? `${matchedArray[0].split(".")[0]}.html` : <never>matchedArray;
+    return matchedArray
+      ? `${matchedArray[0].split(".")[0]}.html`
+      : <never>matchedArray;
   },
 };
 
-export const CHUNK_SIZE: number = 5
+export const CHUNK_SIZE: number = 3

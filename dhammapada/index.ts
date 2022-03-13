@@ -9,12 +9,13 @@ export async function crawl() {
   const saver = new DbSaver(DB_CONF);
   // const saver = new FileSaver(FILE_CONF);
   const crawler = new Crawler(CRAWLER_CONF, saver);
-  const urlChunkList = chunkArray<string>(WEBSITE.pagesUrl, CHUNK_SIZE)
+  const urlChunkList = chunkArray<string>(WEBSITE.urlSuffixes, CHUNK_SIZE)
   for (let chunk of urlChunkList) {
     let website: IWebsite = {
-      pagesUrl: chunk,
+      urlPrefix: WEBSITE.urlPrefix,
+      urlSuffixes: chunk,
       extractPageTitle: WEBSITE.extractPageTitle
     }
-    crawler.crawl(website);
+    await crawler.crawl(website);
   }
 }

@@ -9,8 +9,9 @@ export class Crawler {
     const browser = await Puppeteer.launch(this._conf);
     try {
       let result: IPage[] = [];
-      for (let url of website.pagesUrl) {
-        const page = await browser.newPage();
+      const page = await browser.newPage();
+      for (let urlSuffix of website.urlSuffixes) {
+        const url = `${website.urlPrefix}/${urlSuffix}`;
         await page.goto(url);
         let content = await page.content();
         result.push({

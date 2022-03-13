@@ -22,6 +22,7 @@ export interface ICrawlerConf {
 }
 
 export interface IWebsite {
-  pagesUrl: string[],
+  urlPrefix: string,
+  urlSuffixes: string[],
   extractPageTitle(url: string): string;
 }
