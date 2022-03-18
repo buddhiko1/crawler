@@ -5,9 +5,8 @@ import { chunkArray } from "../common/tools";
 import { IWebsite } from "../common/interfaces";
 import { DB_CONF, FILE_CONF, CRAWLER_CONF, WEBSITE, CHUNK_SIZE } from "./config";
 
-export async function crawl() {
-  const saver = new DbSaver(DB_CONF);
-  // const saver = new FileSaver(FILE_CONF);
+export async function crawl(saveToDb: boolean) {
+  const saver = saveToDb ? new DbSaver(DB_CONF) : new FileSaver(FILE_CONF);
   const crawler = new Crawler(CRAWLER_CONF, saver);
   const urlChunkList = chunkArray<string>(WEBSITE.urlSuffixes, CHUNK_SIZE)
   for (let chunk of urlChunkList) {

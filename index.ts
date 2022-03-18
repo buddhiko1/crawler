@@ -1,3 +1,4 @@
 import { crawl } from "./dhammapada"
 
-crawl().catch(console.dir);
+const saveToDb = true
+crawl(saveToDb).catch(console.dir);
