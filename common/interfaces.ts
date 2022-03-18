@@ -1,19 +1,21 @@
-import { IDhammapadaPage } from "../dhammapada/interfaces";
-
-export type IPage = IDhammapadaPage;
-
-export interface ISaver {
-  save(pages: IPage[]): void;
+export interface IPage {
+  url: string,
+  content: string,
 }
 
-export interface IDbSaverConf {
+export interface IDbConf {
   uri: string;
   db: string;
   collection: string;
 }
 
-export interface IFileSaverConf {
-  dir: string
+export interface IFsConf {
+  dir: string,
+  title (url: string): string,
+}
+
+export interface ISaverService {
+  save(pages: IPage[]): Promise<void>;
 }
 
 export interface ICrawlerConf {
@@ -21,8 +23,11 @@ export interface ICrawlerConf {
   slowMo: number; // slow down by ms
 }
 
+export interface ICrawService {
+  crawl(urls: string[]): Promise<IPage[]>;
+}
+
 export interface IWebsite {
   urlPrefix: string,
-  urlSuffixes: string[],
-  extractPageTitle(url: string): string;
+  urlSuffixes: string[]
 }

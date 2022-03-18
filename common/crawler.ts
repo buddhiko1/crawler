@@ -1,29 +1,24 @@
 import Puppeteer from "puppeteer";
+import { ICrawService, ICrawlerConf, IPage } from "./interfaces";
 
-import { IPage, ISaver, ICrawlerConf, IWebsite } from "./interfaces";
+export class Crawler implements ICrawService {
+  constructor(private _conf: ICrawlerConf) {}
 
-export class Crawler {
-  constructor(private _conf: ICrawlerConf, private _saver: ISaver) {}
-
-  async crawl(website: IWebsite) {
+  async crawl(urls: string[]): Promise<IPage[]> {
     const browser = await Puppeteer.launch(this._conf);
-    try {
-      let result: IPage[] = [];
-      const page = await browser.newPage();
-      for (let urlSuffix of website.urlSuffixes) {
-        const url = `${website.urlPrefix}/${urlSuffix}`;
-        await page.goto(url);
-        let content = await page.content();
-        result.push({
-          title: website.extractPageTitle(url),
-          content,
-        });
-      }
-      this._saver.save(result);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      await browser.close();
+    let result: IPage[] = [];
+    const crawler = await browser.newPage();
+    for (let url of urls) {
+      await crawler.goto(url);
+      let content = await crawler.content();
+      content = content.replace(/\n/g, "");
+      let page: IPage = {
+        url,
+        content,
+      };
+      result.push(page);
     }
+    await browser.close();
+    return result;
   }
 }

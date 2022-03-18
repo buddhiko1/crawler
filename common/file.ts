@@ -1,21 +1,22 @@
 import fs from "fs";
-import { ISaver, IFileSaverConf, IPage } from "./interfaces";
+import { IFsConf, IPage, ISaverService } from "./interfaces";
 
-export class FileSaver implements ISaver {
-  private _conf: IFileSaverConf;
 
-  constructor(conf: IFileSaverConf) {
+export class FsSaver implements ISaverService {
+  private _conf: IFsConf;
+
+  constructor(conf: IFsConf) {
     if (!fs.existsSync(conf.dir)) {
       fs.mkdirSync(conf.dir, { recursive: true });
     }
     this._conf = conf;
   }
 
-  save(pages: IPage[]) {
+  async save(pages: IPage[]): Promise<void> {
     for (let page of pages) {
-      const filePath = `${this._conf.dir}/${page.title}`;
+      const filePath = `${this._conf.dir}/${this._conf.title(page.url)}`;
       fs.writeFileSync(filePath, page.content, "utf-8");
-      console.log(`${page.title} file was created`);
+      console.log(`${this._conf.title(page.url)} file was created`);
     }
   }
 }
